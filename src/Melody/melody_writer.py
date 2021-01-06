@@ -1,17 +1,19 @@
-from music21 import note, stream, midi
-
-# music21 dependencies
+from music21 import stream, midi
+from NoteFactory import new_note as n
 import matplotlib
 import numpy
 
-# trial
-if __name__ == "__main__":
-    s = stream.Stream()
-    s.append([note.Note("C4"), note.Note("C4"),
-              note.Note("G4"), note.Note("G4"),
-              note.Note("A4"), note.Note("A4"),
-              note.Note("G4", quarterLength=2)])
-    mf = midi.translate.streamToMidiFile(s)
-    mf.open('./out/melody.mid', 'wb')
+out_dir = "./out/"
+
+
+def export_midi(filename: str, export_stream: stream.Stream) -> None:
+    mf = midi.translate.streamToMidiFile(export_stream)
+    mf.open(out_dir + filename + '.mid', 'wb')
     mf.write()
     mf.close()
+
+
+def generate_default() -> None:
+    s = stream.Stream()
+    s.append([n("C4"), n("C4"), n("G4"), n("G4"), n("A4"), n("A4"), n("G4", 2)])
+    export_midi("melody", s)
